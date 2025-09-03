@@ -1,0 +1,33 @@
+---
+title: "NY Pollution"
+author: "Juhi Malwade"
+date: "2025-09-02"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=FALSE,message=FALSE}
+library(tidyverse)
+library(lubridate)
+
+ny_pollution = read_csv('ny_pollution.csv.gz')
+
+pollution_year = ny_pollution %>% 
+  group_by(year = lubridate::floor_date(date, "year")) %>% 
+  summarize(mean_pollution = mean(pollution, na.rm = TRUE))
+
+pollution_year
+  
+```
+
+```{r}
+ggplot(pollution_year) + aes(x = year, y = mean_pollution) + geom_line() + ylab("mean pollution")
+```
+
+The mean pollution per year in New York has decreased from 26.9 in 1997 to 17.4 in 2005. This decrease was more rapid from 1997-1999 and 2003-2004. However, there was a slight increase from 15.2 in 2004 to 17.4 in 2005. If we had more data from the years after 2005, we would be able to conclude if this slight increase continues or if the overall downward trend persists as New York takes more measures to decrease pollution. 
+
